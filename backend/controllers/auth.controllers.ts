@@ -1,24 +1,30 @@
 import { Request, Response } from "express"
+import { HttpError } from "http-errors";
+import authServices from "../services/auth.services";
 
-const signup = (req:Request,res:Response) => {
-    const body = req.body;
-    try {
-        
-    } catch (error) {
-        
+class AuthController {
+    async signUp(req: Request, res:Response) {
+        try {
+            const {email,password,fullName,profilePicture} = req.body;
+            await authServices.signUp({email,password,fullName,profilePicture});
+            res.status(201).json({
+                message: 'User created successful'
+            })
+        } catch (error) {
+            if (error instanceof HttpError){
+                res.status(error.status).json({
+                    message: error.message
+                })
+                return;
+            }
+            res.status(500).json({
+                message: `Server Error ${error}`
+            })
+        }
     }
+    
 }
 
+const authController = new AuthController();
 
-const login = (req:Request,res:Response) => {
-    res.send('Sign up routes')
-}
-const logout = (req:Request,res:Response) => {
-    res.send('Sign up routes')
-}
-
-export default {
-    signup,
-    login,
-    logout
-}
+export default authController;
