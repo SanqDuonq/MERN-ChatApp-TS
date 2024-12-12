@@ -2,13 +2,14 @@ import { User } from "../models/user.model";
 import createErrors from 'http-errors';
 import otpServices from "./otp.services";
 import emailServices from "./email.services";
+import { PassThrough } from "nodemailer/lib/xoauth2";
 
 export interface IAuthService {
     signUp(data: {email:string,password:string,fullName:string,profilePicture:string}): Promise<void>,
     signIn(data: {email:string,password:string}):Promise<void>,
     verifyEmail(data: {email:string,OTP:string}):Promise<void>,
     forgotPassword(email:string): Promise<void>,
-    resetPassword(OTP:string,newPassword:string):Promise<void>,
+    resetPassword(data:{OTP:string,newPassword:string}):Promise<void>,
 }
 
 export class AuthService implements IAuthService {
@@ -37,7 +38,7 @@ export class AuthService implements IAuthService {
         if (!user) {
             throw createErrors(404, 'Email not exists');
         }
-        const isPassword = user.verifyPassword(body.password);
+        const isPassword = await user.verifyPassword(body.password);
         if (!isPassword){
             throw createErrors(400, 'Email or password is wrong!')
         }
@@ -69,12 +70,24 @@ export class AuthService implements IAuthService {
         user.resetOTP = OTP;
         user.resetOTPExpiredAt = OTPExpiredAt;
         emailServices.sendForgotEmail(email,OTP);
-
         await user.save();
     }
 
-    async resetPassword(OTP: string, newPassword: string): Promise<void> {
-        
+    async resetPassword(data: {OTP: string, newPassword: string}): Promise<void> {
+        const {OTP,newPassword} = data
+        const user = await User.findOne({
+            resetOTP: OTP
+        })
+        if (!user){
+            throw createErrors(404, 'OTP Wrong!')
+        }
+        if (user.resetOTPExpiredAt < new Date()){
+            throw createErrors(400, 'OTP is expired!')
+        }
+        user.password = newPassword;
+        await user.verifyPassword(newPassword);
+
+        await user.save();
     }
 }
 
