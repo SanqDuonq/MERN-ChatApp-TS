@@ -2,10 +2,9 @@ import mongoose, { MongooseError, Schema } from "mongoose";
 import IUser from "../interface/user.interface";
 import bcryptjs from 'bcryptjs'
 import log from "../utils/logger";
-import createErrors from 'http-errors'
 
 interface IUserMethod extends IUser {
-    verifyPassword: (candidate:string) => Promise<void>
+    verifyPassword: (candidate:string) => Promise<boolean>
 }
 
 const userSchema:Schema<IUserMethod> = new Schema({
@@ -48,7 +47,7 @@ const userSchema:Schema<IUserMethod> = new Schema({
     timestamps: true
 })
 
-userSchema.pre('save', async function (next){
+userSchema.pre('save', async function(next){
     if (!this.isModified('password')) {
         return next();
     }
