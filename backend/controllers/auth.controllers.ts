@@ -22,7 +22,25 @@ class AuthController {
             })
         }
     }
-    
+    async verifyEmail(req:Request, res:Response) {
+        try {
+            const {email,OTP} = req.body;
+            await authServices.verifyEmail({email,OTP});
+            res.status(200).json({
+                message: 'Verify email successful'
+            })
+        } catch (error) {
+            if (error instanceof HttpError){
+                res.status(error.status).json({
+                    message: error.message
+                })
+                return;
+            }
+            res.status(500).json({
+                message: `Server error ${error}`
+            })
+        }
+    }
 }
 
 const authController = new AuthController();

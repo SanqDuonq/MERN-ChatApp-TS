@@ -20,6 +20,24 @@ const userSchema:Schema<IUser> = new Schema({
     profilePicture: {
         type: String,
         default: ''
+    },
+    isVerify: {
+        type: Boolean,
+        default: false
+    },
+    verifyOTP: {
+        type: String,
+        default: ''
+    },
+    verifyOTPExpiredAt: {
+        type: Date
+    },
+    resetOTP: {
+        type: String,
+        default: ''
+    },
+    resetOTPExpiredAt: {
+        type: Date
     }
 }, {
     timestamps: true
