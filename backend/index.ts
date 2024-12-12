@@ -3,9 +3,10 @@ import authRoutes from './routes/auth.route'
 import log from './utils/logger';
 import connectMongoDB from './database/connect-mongoDB';
 import NotFoundRoute from './middlewares/not-found-route.middleware';
+import dotenv from 'dotenv'
+dotenv.config();
 const app = express();
-const port = 3000
-
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use('/api/auth',authRoutes);

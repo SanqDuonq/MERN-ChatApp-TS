@@ -17,6 +17,13 @@ class JwtService {
         })   
         return accessToken;
     }
+    clearJwt(res:Response){
+        res.clearCookie('accessToken',{
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'strict'
+        })
+    }
 }
 
 export default new JwtService();

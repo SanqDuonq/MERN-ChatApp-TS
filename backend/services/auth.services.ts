@@ -9,7 +9,7 @@ export interface IAuthService {
     signIn(data: {email:string,password:string}):Promise<void>,
     verifyEmail(data: {email:string,OTP:string}):Promise<void>,
     forgotPassword(email:string): Promise<void>,
-    resetPassword(OTP:string,newPassword:string):Promise<void>
+    resetPassword(OTP:string,newPassword:string):Promise<void>,
 }
 
 export class AuthService implements IAuthService {

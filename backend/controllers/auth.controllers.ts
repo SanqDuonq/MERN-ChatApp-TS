@@ -2,7 +2,6 @@ import { Request, Response } from "express"
 import { HttpError } from "http-errors";
 import authServices from "../services/auth.services";
 import jwtServices from "../services/jwt.services";
-
 class AuthController {
     async signUp(req: Request, res:Response) {
         try {
@@ -61,6 +60,19 @@ class AuthController {
             res.status(500).json({
                 message: `Server error ${error}`
             })
+        }
+    }
+    async logout(req:Request,res:Response) {
+        try {
+            jwtServices.clearJwt(res);
+            res.status(200).json({
+                message: 'Logout successful!'
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: `Server error ${error}`
+            })
+            return;
         }
     }
 }
