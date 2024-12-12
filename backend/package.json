@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/nodemailer": "^6.4.17",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
