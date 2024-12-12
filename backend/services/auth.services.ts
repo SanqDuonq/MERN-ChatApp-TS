@@ -2,7 +2,6 @@ import { User } from "../models/user.model";
 import createErrors from 'http-errors';
 import otpServices from "./otp.services";
 import emailServices from "./email.services";
-import jwtServices from "./jwt.services";
 
 export interface IAuthService {
     signUp(data: {email:string,password:string,fullName:string,profilePicture:string}): Promise<void>,
@@ -62,7 +61,16 @@ export class AuthService implements IAuthService {
     }
 
     async forgotPassword(email: string): Promise<void> {
-        
+        const user = await User.findOne({email});
+        if (!user) {
+            throw createErrors(404, 'Email not exists!');
+        }        
+        const {OTP,OTPExpiredAt} = otpServices.generateOTP();
+        user.resetOTP = OTP;
+        user.resetOTPExpiredAt = OTPExpiredAt;
+        emailServices.sendForgotEmail(email,OTP);
+
+        await user.save();
     }
 
     async resetPassword(OTP: string, newPassword: string): Promise<void> {
