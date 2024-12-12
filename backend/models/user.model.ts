@@ -2,8 +2,13 @@ import mongoose, { MongooseError, Schema } from "mongoose";
 import IUser from "../interface/user.interface";
 import bcryptjs from 'bcryptjs'
 import log from "../utils/logger";
+import createErrors from 'http-errors'
 
-const userSchema:Schema<IUser> = new Schema({
+interface IUserMethod extends IUser {
+    verifyPassword: (candidate:string) => Promise<void>
+}
+
+const userSchema:Schema<IUserMethod> = new Schema({
     email: {
         type: String,
         required: true,
@@ -56,5 +61,9 @@ userSchema.pre('save', async function (next){
         next(error as MongooseError)
     }
 })
+
+userSchema.methods.verifyPassword = async function (candidate: string) {
+    return await bcryptjs.compare(candidate,this.password);
+}
 
 export const User = mongoose.model('user',userSchema);

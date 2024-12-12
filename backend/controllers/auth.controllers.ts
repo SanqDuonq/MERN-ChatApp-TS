@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { HttpError } from "http-errors";
 import authServices from "../services/auth.services";
+import jwtServices from "../services/jwt.services";
 
 class AuthController {
     async signUp(req: Request, res:Response) {
@@ -31,6 +32,27 @@ class AuthController {
             })
         } catch (error) {
             if (error instanceof HttpError){
+                res.status(error.status).json({
+                    message: error.message
+                })
+                return;
+            }
+            res.status(500).json({
+                message: `Server error ${error}`
+            })
+        }
+    }
+    async signIn (req:Request,res:Response) {
+        const {email,password} = req.body;
+        try {
+            await authServices.signIn({email,password});
+            const accessToken = jwtServices.generateJwt(res,email);
+            res.status(200).json({
+                message: 'Sign in successful!',
+                accessToken: accessToken
+            })
+        } catch (error) {
+            if (error instanceof HttpError) {
                 res.status(error.status).json({
                     message: error.message
                 })

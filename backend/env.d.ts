@@ -4,6 +4,8 @@ declare namespace NodeJS {
         EMAIL_HOST: string,
         EMAIL_PORT: number,
         EMAIL_USER: string
-        EMAIL_PASS: string
+        EMAIL_PASS: string,
+        JWT_SECRET: string
+        NODE_ENV: string
     }
 }
