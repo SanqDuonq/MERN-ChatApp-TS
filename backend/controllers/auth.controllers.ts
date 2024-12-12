@@ -75,6 +75,25 @@ class AuthController {
             return;
         }
     }
+    async forgotPassword(req:Request,res:Response) {
+        const {email} = req.body
+        try {
+            await authServices.forgotPassword(email);
+            res.status(200).json({
+                message: `Email sent to ${email}` 
+            })
+        } catch (error) {
+            if (error instanceof HttpError){
+                res.status(error.status).json({
+                    message: error.message
+                })
+                return;
+            }
+            res.status(500).json({
+                message: `Server error ${error}`
+            })
+        }
+    }
 }
 
 const authController = new AuthController();
