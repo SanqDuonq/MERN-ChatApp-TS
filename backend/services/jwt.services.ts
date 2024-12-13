@@ -4,9 +4,10 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 class JwtService {
-    generateJwt(res:Response,email:string) {
+    generateJwt(res:Response,user: {email:string,userId:string}) {
         const payload = {
-            email
+            email: user.email,
+            userId: user.userId
         }
         const accessToken = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '2h'});        
         res.cookie('accessToken', accessToken, {

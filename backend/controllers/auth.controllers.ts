@@ -44,8 +44,8 @@ class AuthController {
     async signIn (req:Request,res:Response) {
         const {email,password} = req.body;
         try {
-            await authServices.signIn({email,password});
-            const accessToken = jwtServices.generateJwt(res,email);
+            const user = await authServices.signIn({email,password});
+            const accessToken = jwtServices.generateJwt(res,{ email: user.email, userId: user.userId});
             res.status(200).json({
                 message: 'Sign in successful!',
                 accessToken: accessToken
@@ -110,6 +110,26 @@ class AuthController {
             }
             res.status(500).json({
                 message: `Server error ${error}`
+            })
+        }
+    }
+    async updateProfile(req:Request,res:Response) {
+        const {profilePicture} = req.body;
+        const userId = req.user!;
+        try {
+            await authServices.updateProfile({userId,profilePicture});
+            res.status(200).json({
+                message: 'Update profile successful!'
+            })
+        } catch (error) {
+            if (error instanceof HttpError){
+                res.status(error.status).json({
+                    message: error.message
+                })
+            }
+            res.status(500).json({
+                message: `Server error ${error}`,
+                error: error instanceof Error ? error.message : error   
             })
         }
     }

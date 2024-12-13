@@ -1,8 +1,9 @@
 import { Request,Response,NextFunction } from "express";
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv'
 import log from "../utils/logger";
 dotenv.config();
+
 function verifyToken(req:Request,res:Response,next:NextFunction) {
     try {
         const accessToken = req.cookies.accessToken;
@@ -12,7 +13,8 @@ function verifyToken(req:Request,res:Response,next:NextFunction) {
             })
             return;
         }
-        jwt.verify(accessToken,process.env.JWT_SECRET)
+        const decode = jwt.verify(accessToken,process.env.JWT_SECRET) as JwtPayload
+        req.user = decode.userId
         next();
     } catch (error) {
         log.error(`Error in verify token ${error}`);
@@ -23,4 +25,6 @@ function verifyToken(req:Request,res:Response,next:NextFunction) {
     }
 }
 
-export default verifyToken;
+export default {
+    verifyToken
+};
