@@ -1,6 +1,9 @@
+import { Types } from "mongoose"
+
 interface IMessage {
-    senderId: Object,
-    receiverId: Object,
-    text: string,
-    image: string
+    senderId: Types.ObjectId,
+    receiverId: Types.ObjectId,
+    text?: string,
+    image?: string
 }
+export default IMessage
