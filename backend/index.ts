@@ -1,5 +1,6 @@
 import express from 'express'
 import authRoutes from './routes/auth.route'
+import messageRoutes from './routes/message.route';
 import cookieParser from 'cookie-parser'
 import log from './utils/logger';
 import connectMongoDB from './database/connect-mongoDB';
@@ -12,6 +13,7 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth',authRoutes);
+app.use('/api/message',messageRoutes);
 app.use(NotFoundRoute);
 
 app.listen(port,() => {
