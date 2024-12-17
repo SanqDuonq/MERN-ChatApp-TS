@@ -46,6 +46,32 @@ class MessageController {
             })
         }
     }
+    async sendMessages(req:Request,res:Response) {
+        const {text,image} = req.body;
+        const {id: receiverId} = req.params
+        const senderId = req.user!
+        try {
+            const message = await messageServices.sendMessage({
+                senderId,
+                receiverId,
+                text,
+                image
+            })
+            res.status(201).json({
+                message
+            })
+        } catch (error) {
+            if (error instanceof HttpError) {
+                res.status(error.status).json({
+                    message: error.message
+                })
+                return;
+            }
+            res.status(500).json({
+                message: `Server error ${error}`
+            })
+        }
+    }
 }
 
 export default new MessageController();

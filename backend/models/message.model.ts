@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import IMessage from "../interface/message.interface";
 
 export const messageSchema: Schema<IMessage> = new Schema({
     senderId: {
