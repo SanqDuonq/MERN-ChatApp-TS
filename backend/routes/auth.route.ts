@@ -9,7 +9,7 @@ router.post('/sign-in',authController.signIn);
 router.post('/logout',authController.logout);
 router.post('/forgot-password',authController.forgotPassword);
 router.post('/reset-password',authController.resetPassword);
-
+router.get('/checkAuth',authMiddleware.verifyToken,authController.checkAuth);
 router.put('/update-profile',authMiddleware.verifyToken,authController.updateProfile);
 
 export default router
