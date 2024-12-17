@@ -133,6 +133,19 @@ class AuthController {
             })
         }
     }
+    async checkAuth(req:Request,res:Response) {
+        const user = req.user!;
+        try {
+            res.status(200).json({
+                message: 'Check authentication successful',
+                user
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: `Server Error ${error}`
+            })
+        }
+    }
 }
 
 const authController = new AuthController();
