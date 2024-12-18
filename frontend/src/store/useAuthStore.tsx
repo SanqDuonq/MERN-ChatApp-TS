@@ -9,7 +9,6 @@ export const useAuthStore = create<IUseAuthStore>((set) => ({
     isUpdatingProfile: false,
     isCheckingAuth: false,
 
-
     //* Check authentication
     checkAuth: async () => {
         try {
