@@ -6,11 +6,12 @@ interface IInputProps {
     type: 'text' | 'password',
     placeholder: string,
     value: string,
+    error?: string,
     icon: React.ElementType,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const InputComponent = ({ label, type, icon: ICon, placeholder, value, onChange }: IInputProps) => {
+export const InputComponent = ({ label, type, icon: ICon, placeholder, value, onChange,error }: IInputProps) => {
     const [showHide, setShowHide] = useState(false);
     const handleShow = () => {
         setShowHide(hide => !hide)
@@ -45,6 +46,7 @@ export const InputComponent = ({ label, type, icon: ICon, placeholder, value, on
                     </button>
                 )}
             </div>
+            {error && <p className="text-error text-sm mt-1">{error}</p>}
         </div>
     )
 }

@@ -3,7 +3,8 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Lock, Mail, MessageSquare, User } from "lucide-react";
 import { InputComponent } from "../components/input";
 import { ButtonComponent } from "../components/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
+import signUpInput, { signUpSchema } from "../schema/auth.schema";
 
 const SignUpPage = () => {
     const [formData, setFormData] = useState({
@@ -12,14 +13,26 @@ const SignUpPage = () => {
         password: '',
         confirmPassword: ''
     })
-    const { signup, isSigningUp } = useAuthStore()
-
-    const validateForm = () => {
-
-    }
-
+    const [formErrors,setFormErrors] = useState<Partial<signUpInput>>();
+    const {signUp, isSigningUp } = useAuthStore();
+    const navigate = useNavigate();
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const result = signUpSchema.safeParse({
+            body: formData
+        })
+        if (!result.success) {
+            const errors = result.error.format();
+            setFormErrors({
+                fullName: errors.body?.fullName?._errors[0],
+                email: errors.body?.email?._errors[0],
+                password: errors.body?.password?._errors[0],
+                confirmPassword: errors.body?.confirmPassword?._errors[0],
+            })
+            return;
+        }
+        signUp(formData);
+        navigate('/');
     }
 
     return (
@@ -31,7 +44,7 @@ const SignUpPage = () => {
                         <div className="flex flex-col items-center gap-2 group">
                             <div
                                 className="size-12 rounded-xl bg-primary/10 flex items-center justify-center
-                        group-hover:bg-primary/20 transition-colors"
+                                           group-hover:bg-primary/20 transition-colors"
                             >
                                 <MessageSquare
                                     className="size-6 text-primary"
@@ -43,7 +56,7 @@ const SignUpPage = () => {
                     </div>
                     <form
                         onSubmit={handleSubmit}
-                        className="space-y-6"
+                        className="space-y-4"
                     >
                         <InputComponent
                             label="Full name"
@@ -52,6 +65,7 @@ const SignUpPage = () => {
                             placeholder="Full name"
                             value={formData.fullName}
                             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                            error={formErrors?.fullName}
                         />
                         <InputComponent
                             label="Email"
@@ -60,6 +74,7 @@ const SignUpPage = () => {
                             placeholder="Email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            error={formErrors?.email}
                         />
                         <InputComponent
                             label="Password"
@@ -68,6 +83,7 @@ const SignUpPage = () => {
                             placeholder="Password"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            error={formErrors?.password}
                         />
                         <InputComponent
                             label="Confirm password"
@@ -76,6 +92,7 @@ const SignUpPage = () => {
                             placeholder="Confirm password"
                             value={formData.confirmPassword}
                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                            error={formErrors?.confirmPassword}
                         />
                         <ButtonComponent
                             name="Sign up"
