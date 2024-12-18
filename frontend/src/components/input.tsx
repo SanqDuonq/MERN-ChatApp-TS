@@ -37,9 +37,10 @@ export const InputComponent = ({ label, type, icon: ICon, placeholder, value, on
                     <button
                         onClick={handleShow}
                         className=" absolute inset-y-0 right-0 pr-3 flex items-center"
+                        tabIndex={-1}
                     >
                         {showHide ? (
-                            <Eye className="size-5 " />
+                            <Eye className="size-5" />
                         ) : (
                             <EyeOff className="size-5 text-base-content/40" />
                         )}

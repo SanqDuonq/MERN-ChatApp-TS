@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Lock, Mail, MessageSquare, User } from "lucide-react";
 import { InputComponent } from "../components/input";
 import { ButtonComponent } from "../components/button";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import signUpInput, { signUpSchema } from "../schema/auth.schema";
 
 const SignUpPage = () => {
@@ -15,7 +15,6 @@ const SignUpPage = () => {
     })
     const [formErrors,setFormErrors] = useState<Partial<signUpInput>>();
     const {signUp, isSigningUp } = useAuthStore();
-    const navigate = useNavigate();
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const result = signUpSchema.safeParse({
@@ -32,7 +31,6 @@ const SignUpPage = () => {
             return;
         }
         signUp(formData);
-        navigate('/');
     }
 
     return (
