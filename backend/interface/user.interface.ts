@@ -1,4 +1,4 @@
-interface IUser {
+interface IUser extends Document {
     email: string,
     fullName: string,
     password: string,
