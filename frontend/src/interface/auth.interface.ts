@@ -9,5 +9,5 @@ export interface IUseAuthStore extends IUseAuthMethod {
 export interface IUseAuthMethod {
     checkAuth: () => Promise<void>;
     signUp: (data: {fullName: string; email: string; password: string}) => Promise<void>;
-	
+    signIn: (data: {email:string,password:string}) => Promise<void>
 }

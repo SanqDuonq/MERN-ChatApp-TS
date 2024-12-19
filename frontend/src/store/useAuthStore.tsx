@@ -34,5 +34,16 @@ export const useAuthStore = create<IUseAuthStore>((set) => ({
         } finally {
             set({isSigningUp: false})
         }
+    },
+
+    //* Sign in 
+    signIn: async (data) => {
+        set({isLogging: true})
+        try {
+            const res = await axiosInstance.post('/sign-in',data)
+            toast.success('Sign in successful!')
+        } catch (error) {
+            
+        }
     }
 }))
