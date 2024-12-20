@@ -14,6 +14,12 @@ export const signUpSchema = object({
     })
 })
 
-type signUpInput = z.infer<typeof signUpSchema>['body'];
+export const signInSchema = object({
+    body: object({
+        email: string().min(1,'Please enter your email').email().endsWith('@gmail.com','Email must be end with @gmail.com'),
+        password: string().min(1,'Please enter your password').regex(new RegExp(patternPassword),'Password must be at 8 character(s), including 1 uppercase, 1 lowercase, 1 number and 1 special number ')
+    })
+})
 
-export default signUpInput;
+export type signUpInput = z.infer<typeof signUpSchema>['body'];
+export type signInInput = z.infer<typeof signInSchema>['body'];

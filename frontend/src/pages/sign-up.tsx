@@ -4,7 +4,7 @@ import { Lock, Mail, MessageSquare, User } from "lucide-react";
 import { InputComponent } from "../components/input";
 import { ButtonComponent } from "../components/button";
 import { Link } from 'react-router-dom';
-import signUpInput, { signUpSchema } from "../schema/auth.schema";
+import { signUpInput, signUpSchema } from "../schema/auth.schema";
 
 const SignUpPage = () => {
     const [formData, setFormData] = useState({
