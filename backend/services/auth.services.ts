@@ -10,7 +10,7 @@ export interface IAuthService {
     verifyEmail(data: {email:string,OTP:string}):Promise<void>,
     forgotPassword(email:string): Promise<void>,
     resetPassword(data:{OTP:string,newPassword:string}):Promise<void>,
-    updateProfile(data:{userId:string,profilePicture:string}): Promise<void>
+    updateProfile(data:{userId:string,profilePicture:string}): Promise<void>,
 }
 
 export class AuthService implements IAuthService {
