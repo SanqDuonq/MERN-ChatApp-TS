@@ -1,12 +1,15 @@
-import pino from 'pino'
+import pino from "pino";
 
 const log = pino({
-    transport: {
-        target: 'pino-pretty'
-    },
-    base: {
-        pid: false
-    }
-})
+	transport:
+		process.env.NODE_ENV === "production"
+			? {
+				    target: "pino-pretty",
+			  }
+			: undefined,
+	base: {
+		pid: false,
+	},
+});
 
 export default log;
