@@ -3,13 +3,32 @@ import { InputComponent } from "../components/input";
 import { useState } from "react";
 import { ButtonComponent } from "../components/button";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import { signInSchema, signInInput } from '../schema/auth.schema';
 
 const SignInPage = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     })
+    const [formErrors,setFormErrors] = useState<Partial<signInInput>>();
+    const {signIn,isLogging} = useAuthStore();
 
+    const handleSubmit = (e:React.FormEvent) => {
+        e.preventDefault();
+        const result = signInSchema.safeParse({
+            body: formData
+        })
+        if (!result.success) {
+            const errors = result.error.format();
+            setFormErrors({
+                email: errors.body?.email?._errors[0],
+                password: errors.body?.password?._errors[0]
+            })
+            return;
+        }
+        signIn(formData);
+    }
     
     return (
         <div className="min-h-screen">
@@ -28,6 +47,7 @@ const SignInPage = () => {
                         </div>
                     </div>
                     <form
+                        onSubmit={handleSubmit}
                         className="space-y-4"
                     >
                         <InputComponent
@@ -37,7 +57,7 @@ const SignInPage = () => {
                             icon={Mail}
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            error=""
+                            error= {formErrors?.email}
                         />
                         <InputComponent
                             label="Password"
@@ -46,12 +66,12 @@ const SignInPage = () => {
                             icon={Lock}
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            error=""
+                            error={formErrors?.password}
                         />
                         <p className="flex justify-end">Forgot password?</p>
                         <ButtonComponent
                             name="Sign in"
-                            isLoading
+                            isLoading = {isLogging}
                         />
                     </form>
                     <div className="text-center">
