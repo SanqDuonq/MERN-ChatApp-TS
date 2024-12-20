@@ -12,4 +12,4 @@ router.post('/reset-password',authController.resetPassword);
 router.get('/checkAuth',authMiddleware.verifyToken,authController.checkAuth);
 router.put('/update-profile',authMiddleware.verifyToken,authController.updateProfile);
 
-export default router
+export default router;
