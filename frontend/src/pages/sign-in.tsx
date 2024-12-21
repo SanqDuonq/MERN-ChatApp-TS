@@ -11,10 +11,10 @@ const SignInPage = () => {
         email: '',
         password: ''
     })
-    const [formErrors,setFormErrors] = useState<Partial<signInInput>>();
+    const [formErrors, setFormErrors] = useState<Partial<signInInput>>();
     const {signIn,isLogging} = useAuthStore();
 
-    const handleSubmit = (e:React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const result = signInSchema.safeParse({
             body: formData
@@ -29,7 +29,7 @@ const SignInPage = () => {
         }
         signIn(formData);
     }
-    
+
     return (
         <div className="min-h-screen">
             <div className="flex flex-col items-center justify-center p-6 sm:p-12">
@@ -57,7 +57,7 @@ const SignInPage = () => {
                             icon={Mail}
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            error= {formErrors?.email}
+                            error={formErrors?.email}
                         />
                         <InputComponent
                             label="Password"
@@ -71,11 +71,11 @@ const SignInPage = () => {
                         <p className="flex justify-end">Forgot password?</p>
                         <ButtonComponent
                             name="Sign in"
-                            isLoading = {isLogging}
+                            isLoading={isLogging}
                         />
                     </form>
                     <div className="text-center">
-                        <p 
+                        <p
                             className="text-base-content/60"
                         >
                             Don't have an account? {" "}
