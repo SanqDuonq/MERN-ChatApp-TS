@@ -2,6 +2,7 @@ import {create} from 'zustand'
 import { IUseAuthStore } from '../interface/auth.interface'
 import { axiosInstance } from '../api/axios-instance'
 import toast from 'react-hot-toast'
+import ErrorResponse from '../interface/error.interface'
 
 export const useAuthStore = create<IUseAuthStore>((set) => ({
     authUser: null,
@@ -9,6 +10,8 @@ export const useAuthStore = create<IUseAuthStore>((set) => ({
     isLogging: false,
     isUpdatingProfile: false,
     isCheckingAuth: false,
+    isLoading: false,
+    isError: null,
 
     //* Check authentication
     checkAuth: async () => {
@@ -47,6 +50,22 @@ export const useAuthStore = create<IUseAuthStore>((set) => ({
             toast.error('Fail to sign in')
         } finally {
             set({isLogging: false})
+        }
+    },
+
+    //* Verify email
+    verifyEmail: async (data) => {
+        set({isLoading: true})
+        try {
+            const res = await axiosInstance.post('/verify-email',data)
+            toast.success(res.data.message)
+        } catch (error) {
+            const err = error as ErrorResponse
+            const errorMessage = err.response.data.message
+            set({isError: errorMessage})
+            toast.error(errorMessage)
+        } finally {
+            set({isLoading: false})
         }
     }
 }))
