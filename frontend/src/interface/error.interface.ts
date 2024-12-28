@@ -1,4 +1,4 @@
-interface ErrorResponse {
+interface IErrorResponse {
 	response: {
 		data: {
 			message: string;
@@ -6,4 +6,4 @@ interface ErrorResponse {
 	};
 }
 
-export default ErrorResponse;
+export default IErrorResponse;

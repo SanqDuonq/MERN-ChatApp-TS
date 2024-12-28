@@ -7,50 +7,50 @@ import ResetPasswordPage from "./pages/reset-password"
 import SettingPage from "./pages/setting"
 import ProfilePage from "./pages/profile"
 import { NavBarComponent } from "./components/navbar"
-import { useAuthStore } from "./store/useAuthStore"
+import { useAuthStore } from "./store/auth-store"
 import { ReactNode, useEffect } from "react"
 import { LoaderCircle } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 import { VerifyEmailPage } from "./pages/verify-email"
 function App() {
-    const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
+    const { user, checkAuth, isLoading } = useAuthStore()
 
-    if (!isCheckingAuth) {
+    if (!isLoading) {
         <Navigate to='/sign-in' replace />
     }
 
-    if (!authUser?.isVerify) {
+    if (!user?.isVerify) {
         <Navigate to='/verify-email' replace />
     }
 
     //* Redirect authenticated
     const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
-        const { isCheckingAuth, authUser } = useAuthStore();
-        if (isCheckingAuth && authUser) {
+        const { isLoading, user } = useAuthStore();
+        if (isLoading && user) {
             <Navigate to='/'/>
         }
         return <>{children}</>
     }
-    if (authUser && authUser.isVerify) {
+    if (user && user.isVerify) {
         <Navigate to='/' />
     }
     useEffect(() => {
         checkAuth()
     }, [checkAuth])
 
-    if (isCheckingAuth && !authUser) {
+    if (isLoading && !user) {
         <div className="flex items-center justify-center h-screen">
             <LoaderCircle className="size-10 animate-spin text-blue-500" />
         </div>
     }
 
-    console.log({ authUser })
+    console.log({ user })
     return (
         <>
             <div>
                 <NavBarComponent />
                 <Routes>
-                    <Route path="/" element={authUser ? <HomePage /> : <Navigate to='/sign-in' />} />
+                    <Route path="/" element={user ? <HomePage /> : <Navigate to='/sign-in' />} />
                     <Route
                         path="/sign-in"
                         element = {
