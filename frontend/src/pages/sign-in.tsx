@@ -3,7 +3,7 @@ import { InputComponent } from "../components/input";
 import { useState } from "react";
 import { ButtonComponent } from "../components/button";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../store/auth-store";
 import { signInSchema, signInInput } from '../schema/auth.schema';
 
 const SignInPage = () => {
@@ -12,7 +12,7 @@ const SignInPage = () => {
         password: ''
     })
     const [formErrors, setFormErrors] = useState<Partial<signInInput>>();
-    const {signIn,isLogging} = useAuthStore();
+    const {signIn,isLoading} = useAuthStore();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,7 +27,7 @@ const SignInPage = () => {
             })
             return;
         }
-        signIn(formData);
+        signIn(formData.email,formData.password);
     }
 
     return (
@@ -68,10 +68,10 @@ const SignInPage = () => {
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             error={formErrors?.password}
                         />
-                        <p className="flex justify-end">Forgot password?</p>
+                        <p className="flex justify-end cursor-pointer hover:underline">Forgot password?</p>
                         <ButtonComponent
                             name="Sign in"
-                            isLoading={isLogging}
+                            isLoading={isLoading}
                         />
                     </form>
                     <div className="text-center">

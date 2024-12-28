@@ -1,11 +1,11 @@
 import { Mail } from "lucide-react"
 import { OTPInputComponent } from "../components/otp-input"
 import { ButtonComponent } from "../components/button"
-import { useAuthStore } from "../store/useAuthStore"
+import { useAuthStore } from "../store/auth-store"
 
 export const VerifyEmailPage = () => {
     const {verifyEmail,isLoading} = useAuthStore();
-    
+
     return (
         <>
             <div className="flex flex-col items-center justify-center h-screen">
