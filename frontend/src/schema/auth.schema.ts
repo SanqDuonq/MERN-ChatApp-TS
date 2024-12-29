@@ -21,5 +21,12 @@ export const signInSchema = object({
     })
 })
 
+export const forgotPasswordSchema = object({
+    body: object({
+        email: string().min(1,'Please enter your email').email().endsWith('@gmail.com','Email must be end with @gmail.com')
+    })
+})
+
 export type signUpInput = z.infer<typeof signUpSchema>['body'];
 export type signInInput = z.infer<typeof signInSchema>['body'];
+export type forgotInput = z.infer<typeof forgotPasswordSchema>['body'];

@@ -1,70 +1,95 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import HomePage from "./pages/home"
 import SignInPage from "./pages/sign-in"
 import SignUpPage from "./pages/sign-up"
-import ForgotPasswordPage from "./pages/fortgot-password"
+import ForgotPasswordPage from "./pages/forgot-password"
 import ResetPasswordPage from "./pages/reset-password"
 import SettingPage from "./pages/setting"
 import ProfilePage from "./pages/profile"
 import { NavBarComponent } from "./components/navbar"
 import { useAuthStore } from "./store/auth-store"
 import { ReactNode, useEffect } from "react"
-import { LoaderCircle } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 import { VerifyEmailPage } from "./pages/verify-email"
+import LoadingSpinner from "./components/loading-spinner"
+import HomePage from "./pages/home"
+
+//* Protect routes
+const ProtectRoutes = ({ children }: { children: ReactNode }) => {
+    const { user, isAuthenticated } = useAuthStore();
+    if (!isAuthenticated) {
+        return <Navigate to='/sign-in' replace />
+    }
+    if (!user?.user.isVerify) {
+        return <Navigate to='/verify-email' replace />
+    }
+    return <>{children}</>
+}
+
+//* Redirect authenticated
+const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
+    const { isAuthenticated, user } = useAuthStore();
+    if (isAuthenticated && user?.user.isVerify) {
+        return <Navigate to='/' replace/>
+    }
+    return <>{children}</>
+}
+
 function App() {
-    const { user, checkAuth, isLoading } = useAuthStore()
-
-    if (!isLoading) {
-        <Navigate to='/sign-in' replace />
-    }
-
-    if (!user?.isVerify) {
-        <Navigate to='/verify-email' replace />
-    }
-
-    //* Redirect authenticated
-    const RedirectAuthenticated = ({ children }: { children: ReactNode }) => {
-        const { isLoading, user } = useAuthStore();
-        if (isLoading && user) {
-            <Navigate to='/'/>
-        }
-        return <>{children}</>
-    }
-    if (user && user.isVerify) {
-        <Navigate to='/' />
-    }
+    const {checkAuth,isLoading,isAuthenticated,user} = useAuthStore();
     useEffect(() => {
         checkAuth()
     }, [checkAuth])
 
-    if (isLoading && !user) {
-        <div className="flex items-center justify-center h-screen">
-            <LoaderCircle className="size-10 animate-spin text-blue-500" />
-        </div>
-    }
-
-    console.log({ user })
+    if (isLoading) return <LoadingSpinner/>
+    console.log({isAuthenticated,user})
     return (
         <>
             <div>
                 <NavBarComponent />
                 <Routes>
-                    <Route path="/" element={user ? <HomePage /> : <Navigate to='/sign-in' />} />
+                    <Route 
+                        path="/" 
+                        element={
+                            <ProtectRoutes>
+                                <HomePage/>
+                            </ProtectRoutes>
+                        }
+                    />
                     <Route
                         path="/sign-in"
-                        element = {
+                        element={
                             <RedirectAuthenticated>
                                 <SignInPage />
                             </RedirectAuthenticated>
                         }
                     />
-                    <Route path="/sign-up" element={<SignUpPage />} />
+                    <Route 
+                        path="/sign-up" 
+                        element={
+                            <RedirectAuthenticated>
+                                <SignUpPage/>
+                            </RedirectAuthenticated>
+                        } 
+                    />
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/verify-email" element = {<VerifyEmailPage/>}/>
+                    <Route path="/verify-email" element={<VerifyEmailPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
-                    <Route path="/settings" element={<SettingPage />} />
-                    <Route path="/profile-dashboard" element={<ProfilePage />} />
+                    <Route 
+                        path="/settings" 
+                        element={
+                            <ProtectRoutes>
+                                <SettingPage />
+                            </ProtectRoutes>
+                        } 
+                    />
+                    <Route 
+                        path="/profile-dashboard" 
+                        element={
+                            <ProtectRoutes>
+                                <ProfilePage />
+                            </ProtectRoutes>
+                        } 
+                    />
                 </Routes>
                 <Toaster />
             </div>

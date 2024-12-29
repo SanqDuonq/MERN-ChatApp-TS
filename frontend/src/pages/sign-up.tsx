@@ -14,7 +14,7 @@ const SignUpPage = () => {
         confirmPassword: ''
     })
     const [formErrors,setFormErrors] = useState<Partial<signUpInput>>();
-    const {signUp, isSigningUp } = useAuthStore();
+    const {signUp, isLoading } = useAuthStore();
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const result = signUpSchema.safeParse({
@@ -30,7 +30,7 @@ const SignUpPage = () => {
             })
             return;
         }
-        signUp(formData);
+        signUp(formData.fullName,formData.email,formData.password);
     }
 
     return (
@@ -94,7 +94,7 @@ const SignUpPage = () => {
                         />
                         <ButtonComponent
                             name="Sign up"
-                            isLoading={isSigningUp}
+                            isLoading={isLoading}
                         />
                     </form>
                     <div className="text-center">

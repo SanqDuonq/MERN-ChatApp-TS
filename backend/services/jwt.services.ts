@@ -7,7 +7,7 @@ class JwtService {
     generateJwt(res:Response,user: {email:string,userId:string}) {
         const payload = {
             email: user.email,
-            userId: user.userId
+            userId: user.userId,
         }
         const accessToken = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '2h'});        
         res.cookie('accessToken', accessToken, {

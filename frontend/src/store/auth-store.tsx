@@ -89,6 +89,7 @@ export const useAuthStore = create<IAuthState & IAuthAction>((set) => ({
 
     //* Check Authentication
     checkAuth: async () => {
+        set({isLoading:true})
         try {
             const user = await AuthAPI.checkAuth();
             set({isAuthenticated: true,user: user})
