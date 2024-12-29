@@ -48,7 +48,8 @@ class AuthController {
             const accessToken = jwtServices.generateJwt(res,{ email: user.email, userId: user.userId});
             res.status(200).json({
                 message: 'Sign in successful!',
-                accessToken: accessToken
+                accessToken: accessToken,
+                user: user
             })
         } catch (error) {
             if (error instanceof HttpError) {

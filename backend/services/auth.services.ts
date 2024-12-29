@@ -33,7 +33,7 @@ export class AuthService implements IAuthService {
         await newUser.save();
     }
 
-    async signIn(data: { email: string; password: string; }): Promise<{email: string, userId:string}> {
+    async signIn(data: { email: string; password: string; }): Promise<{email: string, userId:string,isVerify: boolean}> {
         const body = data;
         const user = await User.findOne({email: body.email})
         if (!user) {
@@ -43,7 +43,7 @@ export class AuthService implements IAuthService {
         if (!isPassword){
             throw createErrors(400, 'Email or password is wrong!')
         }
-        return {email: user.email, userId: user._id.toString()}
+        return {email: user.email, userId: user._id.toString(), isVerify: user.isVerify}
     }
 
     async verifyEmail(data: { email: string; OTP: string; }): Promise<void> {

@@ -1,6 +1,8 @@
 export interface IUser {
     readonly id: string,
-    isVerify?: boolean
+    user: {
+        isVerify: boolean
+    }
 }
 
 export interface IAuthState {

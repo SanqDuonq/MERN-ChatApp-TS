@@ -2,7 +2,9 @@ interface IUser {
     id: string,
     email:string,
     profilePicture: string,
-    isVerify: boolean,
+    user: {
+        isVerify: boolean
+    },
 }
 
 export default IUser;

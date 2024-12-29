@@ -2,7 +2,7 @@ import { Eye, EyeOff} from "lucide-react"
 import { useState } from "react"
 
 interface IInputProps {
-    label: string,
+    label?: string,
     type: 'text' | 'password',
     placeholder: string,
     value: string,

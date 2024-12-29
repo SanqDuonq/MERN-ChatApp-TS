@@ -68,7 +68,11 @@ const SignInPage = () => {
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             error={formErrors?.password}
                         />
-                        <p className="flex justify-end cursor-pointer hover:underline">Forgot password?</p>
+                        <p className="flex justify-end cursor-pointer hover:underline">
+                            <Link to='/forgot-password'>
+                                Forgot password?
+                            </Link>
+                        </p>
                         <ButtonComponent
                             name="Sign in"
                             isLoading={isLoading}
